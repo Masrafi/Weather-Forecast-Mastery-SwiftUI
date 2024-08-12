@@ -6,19 +6,62 @@
 //
 
 import SwiftUI
+import CoreLocation
+
 
 struct WeatherView: View {
     @ObservedObject var viewModel = WeatherViewModel()
     @ObservedObject var viewModelDetails = DetailsWeatherViewModel()
+    @State private var showTextField = false
+    @State private var placeName: String = ""
+    @StateObject private var locationManager = LocationManager()
+    
     var body: some View {
         ZStack{
-                Image("bg3").resizable()
+            Image("bg3").resizable().foregroundColor(.white)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .edgesIgnoringSafeArea(.all)
             ScrollView{
 
                 VStack {
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            showTextField = true
+                        }) {
+                            Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).foregroundColor(.red)
+//                                .sheet(isPresented: $showButtomSheet){
+//                                ShowBottomSheet().presentationDetents([.height(300)])
+//                            }
+                        }
+                    }.padding()
+                    if(showTextField){
+                        TextField("Enter place name", text: $placeName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                        
+                        Button("Get Coordinates") {
+                            print("click")
+                            locationManager.convertAddressToCoordinates(address: placeName) { success in
+                                if success, let lat = locationManager.latitude, let lon = locationManager.longitude {
+                                    print(lat)
+                                    print(lon)
+                                    Task {
+                                        showTextField = false
+                                        await viewModel.getWeather(lat: String(lat), lon: String(lon))
+                                        await viewModelDetails.getWeather(lat: String(lat), lon: String(lon))
+                                    }
+                                } else {
+                                    print(locationManager.errorMessage ?? "Unknown error")
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
                     Image("weather").resizable().foregroundColor(.white).frame(width: 100, height: 100)
                     let tempCelsius = (viewModel.weather?.main?.temp ?? 0) - 273.15
                     Text("Temperature: \(String(format: "%.1f", tempCelsius))°C")
@@ -44,8 +87,8 @@ struct WeatherView: View {
                     }
                 }.padding(.top, 50).onAppear{
                     Task{
-                        await viewModel.getWeather()
-                        await viewModelDetails.getWeather()
+                        await viewModel.getWeather(lat: "37.785834", lon: "-122.406417")
+                        await viewModelDetails.getWeather(lat: "37.785834", lon: "-122.406417")
                     }
                 }.alert(isPresented: $viewModel.shouldShowAlert) {
                     return Alert(
@@ -107,3 +150,69 @@ struct ForecastRow: View {
         .padding(.top, 15)
     }
 }
+
+
+class LocationManager: ObservableObject {
+    @Published var latitude: Double?
+    @Published var longitude: Double?
+    @Published var errorMessage: String?
+
+    private var geocoder = CLGeocoder()
+
+    func convertAddressToCoordinates(address: String, completion: @escaping (Bool) -> Void) {
+        print("jsdflksjdflkjdf")
+        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
+            if let error = error {
+                self?.errorMessage = "Error: \(error.localizedDescription)"
+                print(error)
+                completion(false)
+                return
+            }
+            
+            guard let placemark = placemarks?.first,
+                  let location = placemark.location else {
+                self?.errorMessage = "Location not found"
+                completion(false)
+                return
+            }
+            
+            self?.latitude = location.coordinate.latitude
+            self?.longitude = location.coordinate.longitude
+//            print(location.coordinate.latitude)
+//            print(location.coordinate.longitude)
+            completion(true)
+        }
+    }
+}
+
+//struct ShowBottomSheet:View {
+//    @ObservedObject var viewModel = WeatherViewModel()
+//    @State private var placeName: String = ""
+//    @StateObject private var locationManager = LocationManager()
+//    var body: some View {
+//        VStack{
+//            TextField("Enter place name", text: $placeName)
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
+//                .padding()
+//            
+//            Button("Get Coordinates") {
+//                print("click")
+//                            locationManager.convertAddressToCoordinates(address: placeName) { success in
+//                                if success, let lat = locationManager.latitude, let lon = locationManager.longitude {
+//                                    print(lat)
+//                                    print(lon)
+//                                    Task {
+//                                        await viewModel.getWeather(lat: String(lat), lon: String(lon))
+//                                    }
+//                                } else {
+//                                    print(locationManager.errorMessage ?? "Unknown error")
+//                                }
+//                            }
+//                        }
+//            .padding()
+//            .background(Color.blue)
+//            .foregroundColor(.white)
+//            .cornerRadius(8)
+//        }
+//    }
+//}

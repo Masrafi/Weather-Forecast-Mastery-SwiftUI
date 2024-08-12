@@ -10,8 +10,8 @@ import Foundation
 
 final class WebServiceWeatherDetails {
     
-    static func getWeatherDetailsData() async throws -> DetailsWeatherModel {
-        let urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=700c6acf3c04e16f7b91e0a1e414783e"
+    static func getWeatherDetailsData(lat: String, lon: String) async throws -> DetailsWeatherModel {
+        let urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(lat)&lon=\(lon)&appid=700c6acf3c04e16f7b91e0a1e414783e"
         guard let url = URL(string: urlString) else {
             throw WeatherError.invalidURL
         }

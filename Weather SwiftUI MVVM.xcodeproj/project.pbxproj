@@ -23,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		4044F1B72C67AB0200D5689A /* DetailsWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherModel.swift; sourceTree = "<group>"; };
+		4090FF632C69DAD200AEF915 /* Weather-SwiftUI-MVVM-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Weather-SwiftUI-MVVM-Info.plist"; sourceTree = SOURCE_ROOT; };
 		40E6D78C2C67B409002C6879 /* DetailsWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherViewModel.swift; sourceTree = "<group>"; };
 		40E6D78E2C67B4B1002C6879 /* WebServiceWeatherDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceWeatherDetails.swift; sourceTree = "<group>"; };
 		40F5273E2C66126B00CB41BD /* Weather SwiftUI MVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather SwiftUI MVVM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +77,7 @@
 		40F527402C66126B00CB41BD /* Weather SwiftUI MVVM */ = {
 			isa = PBXGroup;
 			children = (
+				4090FF632C69DAD200AEF915 /* Weather-SwiftUI-MVVM-Info.plist */,
 				40F5275B2C6613CB00CB41BD /* WebServices */,
 				40F527592C66139D00CB41BD /* Weather */,
 				40F5275A2C6613AF00CB41BD /* Utils */,
@@ -339,9 +341,10 @@
 				DEVELOPMENT_TEAM = AS85G6TJA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Weather-SwiftUI-MVVM-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Weather;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -368,9 +371,10 @@
 				DEVELOPMENT_TEAM = AS85G6TJA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Weather-SwiftUI-MVVM-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Weather;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

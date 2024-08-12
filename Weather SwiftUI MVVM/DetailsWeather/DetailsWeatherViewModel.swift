@@ -15,10 +15,10 @@ final class DetailsWeatherViewModel: ObservableObject {
     @Published var shouldShowAlert = false
     @Published var isLoading = false
     
-    func getWeather() async {
+    func getWeather(lat: String, lon: String) async {
         isLoading = true
         do {
-            self.weatherDetails = try await WebServiceWeatherDetails.getWeatherDetailsData()
+            self.weatherDetails = try await WebServiceWeatherDetails.getWeatherDetailsData(lat: lat, lon: lon)
             self.isLoading = false
         } catch(let error) {
             print(error.self)
