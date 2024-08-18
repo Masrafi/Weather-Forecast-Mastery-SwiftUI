@@ -15,6 +15,8 @@ struct WeatherView: View {
     @State private var showTextField = false
     @State private var placeName: String = ""
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var keyboardResponder = KeyboardResponder()
+
     
     var body: some View {
         ZStack{
@@ -22,86 +24,86 @@ struct WeatherView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .edgesIgnoringSafeArea(.all)
-            ScrollView{
-
-                VStack {
-                    HStack{
-                        Spacer()
-                        Button(action: {
-                            showTextField = true
-                        }) {
-                            Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).foregroundColor(.red)
-//                                .sheet(isPresented: $showButtomSheet){
-//                                ShowBottomSheet().presentationDetents([.height(300)])
-//                            }
-                        }
-                    }.padding()
-                    if(showTextField){
-                        TextField("Enter place name", text: $placeName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                        
-                        Button("Get Coordinates") {
-                            print("click")
-                            locationManager.convertAddressToCoordinates(address: placeName) { success in
-                                if success, let lat = locationManager.latitude, let lon = locationManager.longitude {
-                                    print(lat)
-                                    print(lon)
-                                    Task {
-                                        showTextField = false
-                                        await viewModel.getWeather(lat: String(lat), lon: String(lon))
-                                        await viewModelDetails.getWeather(lat: String(lat), lon: String(lon))
+            VStack{
+                ScrollView{
+                    VStack {
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                showTextField = true
+                            }) {
+                                Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).foregroundColor(.red)
+                                //                                .sheet(isPresented: $showButtomSheet){
+                                //                                ShowBottomSheet().presentationDetents([.height(300)])
+                                //                            }
+                            }
+                        }.padding()
+                        if(showTextField){
+                            TextField("Enter place name", text: $placeName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding()
+                            
+                            Button("Get Coordinates") {
+                                print("click")
+                                locationManager.convertAddressToCoordinates(address: placeName) { success in
+                                    if success, let lat = locationManager.latitude, let lon = locationManager.longitude {
+                                        print(lat)
+                                        print(lon)
+                                        Task {
+                                            showTextField = false
+                                            await viewModel.getWeather(lat: String(lat), lon: String(lon))
+                                            await viewModelDetails.getWeather(lat: String(lat), lon: String(lon))
+                                        }
+                                    } else {
+                                        print(locationManager.errorMessage ?? "Unknown error")
                                     }
-                                } else {
-                                    print(locationManager.errorMessage ?? "Unknown error")
                                 }
                             }
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                         }
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                    }
-                    Image("weather").resizable().foregroundColor(.white).frame(width: 100, height: 100)
-                    let tempCelsius = (viewModel.weather?.main?.temp ?? 0) - 273.15
-                    Text("Temperature: \(String(format: "%.1f", tempCelsius))°C")
-                        .font(.system(size: 14)).fontWeight(.bold).foregroundColor(.white)
-                    
-                    Text(viewModel.weather?.name ?? "Name").font(.system(size: 40)).fontWeight(.bold).foregroundColor(.red)
-                    
-                    
-                    VStack{
-                        ForEach(viewModelDetails.weatherDetails?.list ?? [], id: \.dt) { user in
-                            ForecastRow(user: user)
+                        Image("weather").resizable().foregroundColor(.white).frame(width: 100, height: 100)
+                        let tempCelsius = (viewModel.weather?.main?.temp ?? 0) - 273.15
+                        Text("Temperature: \(String(format: "%.1f", tempCelsius))°C")
+                            .font(.system(size: 14)).fontWeight(.bold).foregroundColor(.white)
+                        
+                        Text(viewModel.weather?.name ?? "Name").font(.system(size: 40)).fontWeight(.bold).foregroundColor(.red)
+                        
+                        
+                        VStack{
+                            ForEach(viewModelDetails.weatherDetails?.list ?? [], id: \.dt) { user in
+                                ForecastRow(user: user)
+                            }
+                        }.padding()
+                            .background(Color.white.opacity(0.3))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white.opacity(0.1), lineWidth: 1) // Optional: Add a subtle border
+                            )
+                        
+                        if viewModel.isLoading {
+                            LoaderView()
                         }
-                    }.padding()
-                        .background(Color.white.opacity(0.3))
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.white.opacity(0.1), lineWidth: 1) // Optional: Add a subtle border
+                    }.padding(.top, 50).padding(.top, keyboardResponder.currentHeight).animation(.easeOut(duration: 0.16), value: keyboardResponder.currentHeight).onAppear{
+                        Task{
+                            await viewModel.getWeather(lat: "37.785834", lon: "-122.406417")
+                            await viewModelDetails.getWeather(lat: "37.785834", lon: "-122.406417")
+                        }
+                    }.alert(isPresented: $viewModel.shouldShowAlert) {
+                        return Alert(
+                            title: Text("Error"),
+                            message: Text(viewModel.weatherError?.errorDescription ?? "")
                         )
-                
-                    if viewModel.isLoading {
-                        LoaderView()
+                    }.alert(isPresented: $viewModelDetails.shouldShowAlert) {
+                        return Alert(
+                            title: Text("Error"),
+                            message: Text(viewModelDetails.weatherError?.errorDescription ?? "")
+                        )
                     }
-                }.padding(.top, 50).onAppear{
-                    Task{
-                        await viewModel.getWeather(lat: "37.785834", lon: "-122.406417")
-                        await viewModelDetails.getWeather(lat: "37.785834", lon: "-122.406417")
-                    }
-                }.alert(isPresented: $viewModel.shouldShowAlert) {
-                    return Alert(
-                        title: Text("Error"),
-                        message: Text(viewModel.weatherError?.errorDescription ?? "")
-                    )
-                }.alert(isPresented: $viewModelDetails.shouldShowAlert) {
-                    return Alert(
-                        title: Text("Error"),
-                        message: Text(viewModelDetails.weatherError?.errorDescription ?? "")
-                    )
                 }
-                
             }
         }
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400381042C71F67B004817FB /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400381032C71F67B004817FB /* KeyboardResponder.swift */; };
 		4044F1B82C67AB0200D5689A /* DetailsWeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4044F1B72C67AB0200D5689A /* DetailsWeatherModel.swift */; };
 		40E6D78D2C67B409002C6879 /* DetailsWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6D78C2C67B409002C6879 /* DetailsWeatherViewModel.swift */; };
 		40E6D78F2C67B4B1002C6879 /* WebServiceWeatherDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6D78E2C67B4B1002C6879 /* WebServiceWeatherDetails.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		400381032C71F67B004817FB /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		4044F1B72C67AB0200D5689A /* DetailsWeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherModel.swift; sourceTree = "<group>"; };
 		4090FF632C69DAD200AEF915 /* Weather-SwiftUI-MVVM-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Weather-SwiftUI-MVVM-Info.plist"; sourceTree = SOURCE_ROOT; };
 		40E6D78C2C67B409002C6879 /* DetailsWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherViewModel.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				40F527532C66137B00CB41BD /* ErrorCases.swift */,
 				40F527572C66138900CB41BD /* LoaderView.swift */,
 				40F527452C66126D00CB41BD /* Assets.xcassets */,
+				400381032C71F67B004817FB /* KeyboardResponder.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				40E6D78D2C67B409002C6879 /* DetailsWeatherViewModel.swift in Sources */,
 				40F527442C66126B00CB41BD /* WeatherView.swift in Sources */,
 				40F527522C66135300CB41BD /* WeatherViewModel.swift in Sources */,
+				400381042C71F67B004817FB /* KeyboardResponder.swift in Sources */,
 				40F527562C66137B00CB41BD /* WebServicesWeather.swift in Sources */,
 				40E6D78F2C67B4B1002C6879 /* WebServiceWeatherDetails.swift in Sources */,
 				4044F1B82C67AB0200D5689A /* DetailsWeatherModel.swift in Sources */,
